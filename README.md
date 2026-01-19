@@ -23,11 +23,45 @@ This repository is a monorepo for the Hero assessment. It uses **Next.js (latest
 pnpm install
 ```
 
-### Run the app
+### Local Supabase Setup
 
+The apps expect to read from Supabase views. To run with local Supabase:
+
+1. **Start Supabase locally** (Docker required):
+   ```bash
+   supabase start
+   ```
+   
+   This will output `SUPABASE_URL` and `SUPABASE_ANON_KEY`.
+
+2. **Configure environment variables**:
+   ```bash
+   cp .env.example .env.local
+   ```
+   
+   Then update `.env.local` with the values from `supabase start` output:
+   - `SUPABASE_URL`: The local API URL (e.g., `http://localhost:54321`)
+   - `SUPABASE_ANON_KEY`: The anonymous key from the output
+
+3. **Apply migrations and seed data** (automatic with `supabase start`, or manual):
+   ```bash
+   supabase db push
+   supabase db seed
+   ```
+
+### Run the apps
+
+For the **portal** app:
 ```bash
-pnpm dev
+pnpm -F portal dev
 ```
+
+For the **jobs** app:
+```bash
+pnpm -F jobs dev
+```
+
+Both apps will run in development mode and read listings from Supabase (if configured) or fall back to hardcoded i18n data.
 
 ### Lint & typecheck
 

@@ -14,7 +14,7 @@ export type Locale = (typeof locales)[number];
 const messages = {
   en,
   nl
-} satisfies Record<Locale, typeof en>;
+} satisfies Record<Locale, Record<string, unknown>>;
 
 /**
  * Determine whether a locale is supported.

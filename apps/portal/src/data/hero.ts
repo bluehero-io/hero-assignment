@@ -17,5 +17,5 @@ export type HeroListing = {
  * Return hero listings for the selected locale.
  */
 export function getHeroListings(locale: Locale): HeroListing[] {
-  return getMessages(locale).jobs.listings;
+  return getMessages(locale).jobs.listings as unknown as HeroListing[];
 }

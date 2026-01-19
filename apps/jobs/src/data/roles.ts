@@ -17,5 +17,5 @@ export type RoleListing = {
  * Return role listings for the selected locale.
  */
 export function getRoleListings(locale: Locale): RoleListing[] {
-  return getMessages(locale).roles.listings;
+  return getMessages(locale).roles.listings as unknown as RoleListing[];
 }

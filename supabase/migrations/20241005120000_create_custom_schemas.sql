@@ -82,6 +82,36 @@ alter view public.v_heroos__listings_public set (security_barrier = true);
 
 grant select on public.v_heroos__listings_public to anon, authenticated;
 
+-- Create aliases for portal app (hero_listings_view)
+create or replace view public.hero_listings_view with (security_invoker) as
+select
+  id,
+  title,
+  team,
+  location,
+  type,
+  summary
+from "HeroOS".listings
+where is_public = true;
+
+alter view public.hero_listings_view set (security_barrier = true);
+grant select on public.hero_listings_view to anon, authenticated;
+
+-- Create aliases for jobs app (role_listings_view)
+create or replace view public.role_listings_view with (security_invoker) as
+select
+  id,
+  title,
+  team,
+  location,
+  type,
+  summary
+from "HeroOS".listings
+where is_public = true;
+
+alter view public.role_listings_view set (security_barrier = true);
+grant select on public.role_listings_view to anon, authenticated;
+
 grant usage on schema "HeroOS" to anon, authenticated;
 
 create or replace function public.fn_heroos__create_listing(

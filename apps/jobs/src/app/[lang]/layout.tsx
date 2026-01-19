@@ -8,7 +8,7 @@ import { getSafeLocale, locales } from "@/lib/i18n";
  */
 export type LocaleLayoutProps = {
   children: ReactNode;
-  params: { lang: string };
+  params: Promise<{ lang: string }>;
 };
 
 /**
@@ -21,8 +21,9 @@ export function generateStaticParams() {
 /**
  * Locale-aware layout with shared navigation.
  */
-export default function LocaleLayout({ children, params }: LocaleLayoutProps) {
-  const locale = getSafeLocale(params.lang);
+export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
+  const { lang } = await params;
+  const locale = getSafeLocale(lang);
 
   return (
     <div className="min-h-screen px-6 pb-16 pt-10">

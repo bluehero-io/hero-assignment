@@ -5,10 +5,13 @@ const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:3000";
 const webServer = process.env.PLAYWRIGHT_BASE_URL
   ? undefined
   : {
-      command: "pnpm --filter @hero/portal dev -- --hostname 0.0.0.0 --port 3000",
+      command: "sh -c 'cd apps/portal && pnpm dev'",
       url: baseURL,
       reuseExistingServer: !process.env.CI,
-      timeout: 120_000
+      timeout: 120_000,
+      env: {
+        PORT: "3000"
+      }
     };
 
 export default defineConfig({
