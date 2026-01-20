@@ -8,17 +8,18 @@ import { getMessages, getSafeLocale } from "@/lib/i18n";
  * Props for the job detail page.
  */
 export type JobDetailPageProps = {
-  params: { lang: string; id: string };
+  params: Promise<{ lang: string; id: string }>;
 };
 
 /**
  * Detailed hero role view.
  */
 export default async function JobDetailPage({ params }: JobDetailPageProps) {
-  const locale = getSafeLocale(params.lang as Locale);
+  const { lang, id } = await params;
+  const locale = getSafeLocale(lang as Locale);
   const messages = getMessages(locale);
   const listings = await fetchHeroListings(locale);
-  const listing = listings.find((item) => item.id === params.id);
+  const listing = listings.find((item) => item.id === id);
 
   if (!listing) {
     notFound();

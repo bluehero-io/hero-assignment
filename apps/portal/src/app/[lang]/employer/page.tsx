@@ -8,14 +8,15 @@ import { getMessages, getSafeLocale } from "@/lib/i18n";
  * Props for the employer dashboard page.
  */
 export type EmployerPageProps = {
-  params: { lang: string };
+  params: Promise<{ lang: string }>;
 };
 
 /**
  * Employer dashboard page.
  */
-export default function EmployerPage({ params }: EmployerPageProps) {
-  const locale = getSafeLocale(params.lang as Locale);
+export default async function EmployerPage({ params }: EmployerPageProps) {
+  const { lang } = await params;
+  const locale = getSafeLocale(lang as Locale);
   const messages = getMessages(locale);
 
   return (

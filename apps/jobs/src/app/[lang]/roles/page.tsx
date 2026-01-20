@@ -10,14 +10,15 @@ import { getMessages, getSafeLocale } from "@/lib/i18n";
  * Props for the roles page.
  */
 export type RolesPageProps = {
-  params: { lang: string };
+  params: Promise<{ lang: string }>;
 };
 
 /**
  * Roles listing page.
  */
 export default async function RolesPage({ params }: RolesPageProps) {
-  const locale = getSafeLocale(params.lang as Locale);
+  const { lang } = await params;
+  const locale = getSafeLocale(lang as Locale);
   const messages = getMessages(locale);
   const listings = await fetchRoleListings(locale);
 

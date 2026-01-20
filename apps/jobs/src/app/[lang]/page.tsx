@@ -12,14 +12,15 @@ import { RoleCard } from "@/components/role-card";
  * Props for the home page.
  */
 export type HomePageProps = {
-  params: { lang: string };
+  params: Promise<{ lang: string }>;
 };
 
 /**
  * Employer overview page.
  */
 export default async function HomePage({ params }: HomePageProps) {
-  const locale = getSafeLocale(params.lang as Locale);
+  const { lang } = await params;
+  const locale = getSafeLocale(lang as Locale);
   const messages = getMessages(locale);
   const listings = await fetchRoleListings(locale);
 

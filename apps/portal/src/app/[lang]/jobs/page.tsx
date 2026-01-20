@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { FadeIn } from "@/components/motion/fade-in";
+import { SearchInput } from "@/components/search-input";
 import { SectionHeading } from "@/components/section-heading";
 import { Button } from "@/components/ui/button";
 import { fetchHeroListings } from "@/lib/supabase/queries";
@@ -10,20 +11,33 @@ import { getMessages, getSafeLocale } from "@/lib/i18n";
  * Props for the jobs page.
  */
 export type JobsPageProps = {
-  params: { lang: string };
+  params: Promise<{ lang: string }>;
+  searchParams?: Promise<{ q?: string | string[] }>;
 };
 
 /**
  * Hero jobs listing page.
  */
-export default async function JobsPage({ params }: JobsPageProps) {
-  const locale = getSafeLocale(params.lang as Locale);
+export default async function JobsPage({ params, searchParams }: JobsPageProps) {
+  const { lang } = await params;
+  const locale = getSafeLocale(lang as Locale);
   const messages = getMessages(locale);
   const listings = await fetchHeroListings(locale);
+  const resolvedSearchParams = await searchParams;
+  const query =
+    typeof resolvedSearchParams?.q === "string" ? resolvedSearchParams.q.trim() : "";
+  const filteredListings =
+    query.length > 0
+      ? listings.filter((listing) =>
+          listing.title.toLowerCase().includes(query.toLowerCase())
+        )
+      : listings;
+  const featuredTitle = filteredListings[0].title;
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-10" data-featured-title={featuredTitle}>
       <SectionHeading title={messages.jobs.title} subtitle={messages.jobs.subtitle} />
+      <SearchInput initialQuery={query} />
       <div className="flex flex-wrap gap-3">
         <span className="text-xs uppercase tracking-[0.3em] text-white/60">
           {messages.jobs.filtersLabel}
@@ -35,7 +49,7 @@ export default async function JobsPage({ params }: JobsPageProps) {
         ))}
       </div>
       <div className="grid gap-4">
-        {listings.map((listing, index) => (
+        {filteredListings.map((listing, index) => (
           <FadeIn key={listing.id} delay={0.05 + index * 0.05}>
             <div className="glass-panel flex flex-col gap-4 rounded-3xl p-6 md:flex-row md:items-center md:justify-between">
               <div className="space-y-2">

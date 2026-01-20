@@ -8,17 +8,18 @@ import { getMessages, getSafeLocale } from "@/lib/i18n";
  * Props for the role detail page.
  */
 export type RoleDetailPageProps = {
-  params: { lang: string; id: string };
+  params: Promise<{ lang: string; id: string }>;
 };
 
 /**
  * Detailed role command view.
  */
 export default async function RoleDetailPage({ params }: RoleDetailPageProps) {
-  const locale = getSafeLocale(params.lang as Locale);
+  const { lang, id } = await params;
+  const locale = getSafeLocale(lang as Locale);
   const messages = getMessages(locale);
   const listings = await fetchRoleListings(locale);
-  const listing = listings.find((item) => item.id === params.id);
+  const listing = listings.find((item) => item.id === id);
 
   if (!listing) {
     notFound();

@@ -8,14 +8,15 @@ import { getMessages, getSafeLocale } from "@/lib/i18n";
  * Props for the dashboard page.
  */
 export type DashboardPageProps = {
-  params: { lang: string };
+  params: Promise<{ lang: string }>;
 };
 
 /**
  * Hiring dashboard page.
  */
-export default function DashboardPage({ params }: DashboardPageProps) {
-  const locale = getSafeLocale(params.lang as Locale);
+export default async function DashboardPage({ params }: DashboardPageProps) {
+  const { lang } = await params;
+  const locale = getSafeLocale(lang as Locale);
   const messages = getMessages(locale);
 
   return (
