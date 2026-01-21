@@ -51,6 +51,9 @@ export const en = {
     subtitle: "Immediate-impact roles aligned with your specialty.",
     filtersLabel: "Role focus",
     filters: ["Leadership", "Operations", "Engineering", "Design"],
+    searchNoResults: "No results found",
+    searchNoResultsSubtitle: "No roles match '{query}'",
+    searchNoResultsHint: "Try a different search term or clear the search to see all roles.",
     listings: [
       {
         id: "mission-aurora",
